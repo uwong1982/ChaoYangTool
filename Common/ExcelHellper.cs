@@ -9,7 +9,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Common
 {
-    public class ExcelHellper
+    public class ExcelHellper 
     {
         /// <summary>
         /// 读取Excel，并保存到DataTable中 
