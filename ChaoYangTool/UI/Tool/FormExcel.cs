@@ -62,5 +62,32 @@ namespace ChaoYangTool.UI.Tool
 
             return string.Empty;
         }
+
+        private string SaveExcelPath()
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "文件类型（*.xlsx）|*.xlsx|文件类型（*.xls）|*.xls";//设置文件类型 
+            sfd.FilterIndex = 1;    //设置默认文件类型显示顺序
+            sfd.RestoreDirectory = true;    //保存对话框是否记忆上次打开的目录
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                //string fileNameExt = localFilePath.Substring(localFilePath.LastIndexOf("\\") + 1); //获取文件名，不带路径
+                return sfd.FileName.ToString();
+            }
+
+            return string.Empty;
+        }
+
+        private void buttonSaveExcel_Click(object sender, EventArgs e)
+        {
+            string path = SaveExcelPath();
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return;
+            }
+            DataTable dt = dataGridView1.DataSource as DataTable;
+            Common.ExcelHellper.DataTableToExcel(dt, path, "Sheet1");
+        }
     }
 }
