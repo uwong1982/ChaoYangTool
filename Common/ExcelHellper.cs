@@ -12,6 +12,7 @@ namespace Common
 {
     public class ExcelHellper
     {
+        #region 读取Excel，保存到DataTable中，并返回DataTable
         /// <summary>
         /// 读取Excel，保存到DataTable中，并返回DataTable
         /// </summary>
@@ -63,7 +64,15 @@ namespace Common
 
             return dt;
         }
+        #endregion
 
+        #region 将DataTable导出到Excel中
+        /// <summary>
+        /// 将DataTable导出到Excel中
+        /// </summary>
+        /// <param name="paramDt"></param>
+        /// <param name="paramPath"></param>
+        /// <param name="paramSheet"></param>
         public static void DataTableToExcel(DataTable paramDt, string paramPath, string paramSheet)
         {
             //一般在操作中，都不开这下面四个：
@@ -96,7 +105,14 @@ namespace Common
             workBook.Close();
             excelApp.Quit();
         }
+        #endregion
 
+        #region 根据DataTable创建临时表
+        /// <summary>
+        /// 根据DataTable创建临时表
+        /// </summary>
+        /// <param name="paramDt"></param>
+        /// <returns></returns>
         public static string CreateTempTableSql(DataTable paramDt)
         {
             StringBuilder sb = new StringBuilder();
@@ -108,7 +124,8 @@ namespace Common
                 sb.AppendLine($@"  C{i.ToString()} varchar2(128),");
                 i++;
             }
-            //sb.(sb.Length - 2, 2);
+            var s1 = sb.ToString().Trim().Trim(',');
+            sb.Clear().Append(s1);
             sb.Append(@") on commit preserve rows;");
 
             sb.AppendLine();
@@ -128,8 +145,9 @@ namespace Common
             sb.AppendLine();
             sb.AppendLine();
             sb.AppendLine(@"select * from tmp_test;");
-            sb.AppendLine(@"drop table tmp_test;");
+            sb.AppendLine(@"--drop table tmp_test;");
             return sb.ToString();
         }
+        #endregion
     }
 }
