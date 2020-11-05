@@ -147,7 +147,7 @@ namespace Common
             sb.AppendLine(@"select * from tmp_test;");
             sb.AppendLine(@"--drop table tmp_test;");
             return sb.ToString();
-        }
+        } 
         #endregion
     }
 }
