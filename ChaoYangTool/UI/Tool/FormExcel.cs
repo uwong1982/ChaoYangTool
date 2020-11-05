@@ -47,6 +47,8 @@ namespace ChaoYangTool.UI.Tool
 
             DataTable dt = Common.ExcelHellper.ExcelToDataTable(path, "Sheet1");
             dataGridView1.DataSource = dt;
+
+            textBox1.Text= Common.ExcelHellper.CreateTempTableSql(dt);
         }
 
         private string GetExcelPath()
@@ -65,7 +67,7 @@ namespace ChaoYangTool.UI.Tool
 
         private string SaveExcelPath()
         {
-            SaveFileDialog sfd = new SaveFileDialog();
+            SaveFileDialog sfd = new SaveFileDialog();            
             sfd.Filter = "文件类型（*.xlsx）|*.xlsx|文件类型（*.xls）|*.xls";//设置文件类型 
             sfd.FilterIndex = 1;    //设置默认文件类型显示顺序
             sfd.RestoreDirectory = true;    //保存对话框是否记忆上次打开的目录

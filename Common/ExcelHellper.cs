@@ -26,6 +26,8 @@ namespace Common
             Excel.Worksheet workSheet = null;
             Excel.Range range = null;
 
+            excelApp.Visible = false;
+
             try
             {
 
@@ -44,7 +46,7 @@ namespace Common
                     for (int col = 1; col <= workSheet.UsedRange.Columns.Count; col++)
                     {
                         range = (Excel.Range)workSheet.Cells[row, col];
-                        lis.Add(range.Value2==null?"null": range.Value2.ToString());
+                        lis.Add(range.Value2 == null ? null : range.Value2.ToString());
                     }
                     dt.Rows.Add(lis.ToArray());
                 }
@@ -93,6 +95,41 @@ namespace Common
 
             workBook.Close();
             excelApp.Quit();
+        }
+
+        public static string CreateTempTableSql(DataTable paramDt)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"create global temporary table tmp_test(");
+            sb.AppendLine();
+            int i = 0;
+            foreach (DataColumn dc in paramDt.Columns)
+            {
+                sb.AppendLine($@"  C{i.ToString()} varchar2(128),");
+                i++;
+            }
+            //sb.(sb.Length - 2, 2);
+            sb.Append(@") on commit preserve rows;");
+
+            sb.AppendLine();
+            sb.AppendLine();
+            foreach (DataRow dr in paramDt.Rows)
+            {
+                //insert into twocs_nurseward values('000123','ICUR','333333', sysdate);
+                sb.Append($@"insert into tmp_test values(");
+                foreach (var v in dr.ItemArray)
+                {
+                    sb.Append($@"'{v.ToString().Trim()}',");
+                }
+                sb.Remove(sb.Length - 1, 1);
+                sb.AppendLine(@");");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine(@"select * from tmp_test;");
+            sb.AppendLine(@"drop table tmp_test;");
+            return sb.ToString();
         }
     }
 }
