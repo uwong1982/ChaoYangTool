@@ -50,16 +50,27 @@ namespace ChaoYangTool.UI.Tool
         /// <param name="e"></param>
         private void buttonOpenExcel_Click(object sender, EventArgs e)
         {
-            string path = GetExcelPath();
-            if (string.IsNullOrWhiteSpace(path))
+            try
             {
-                return;
+                textBoxSheetName.BackColor = Color.White;
+                string path = GetExcelPath();
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    return;
+                }
+
+                DataTable dt = Common.ExcelHellper.ExcelToDataTable(path, textBoxSheetName.Text);
+                dataGridView1.DataSource = dt;
+
+                textBoxCreateTempTable.Text = Common.ExcelHellper.CreateTempTableSql(dt);
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
 
-            DataTable dt = Common.ExcelHellper.ExcelToDataTable(path, "Sheet1");
-            dataGridView1.DataSource = dt;
-
-            textBox1.Text = Common.ExcelHellper.CreateTempTableSql(dt);
+                textBoxSheetName.BackColor = Color.LightPink;
+                textBoxSheetName.Focus();
+            }
         }
         #endregion
 
@@ -120,6 +131,23 @@ namespace ChaoYangTool.UI.Tool
             }
             DataTable dt = dataGridView1.DataSource as DataTable;
             Common.ExcelHellper.DataTableToExcel(dt, path, "Sheet1");
+        }
+
+        #endregion
+
+        #region textBoxCreateTempTable_KeyPress事件，按Ctrl+A实现全选
+        /// <summary>
+        /// 按Ctrl+A实现全选
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxCreateTempTable_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\x1')
+            {
+                ((TextBox)sender).SelectAll();
+                e.Handled = true;
+            }
         } 
         #endregion
     }

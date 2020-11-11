@@ -33,7 +33,9 @@
             this.buttonDo = new System.Windows.Forms.Button();
             this.buttonSaveExcel = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxCreateTempTable = new System.Windows.Forms.TextBox();
+            this.textBoxSheetName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -44,7 +46,7 @@
             // buttonOpenExcel
             // 
             this.buttonOpenExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonOpenExcel.Location = new System.Drawing.Point(12, 415);
+            this.buttonOpenExcel.Location = new System.Drawing.Point(189, 415);
             this.buttonOpenExcel.Name = "buttonOpenExcel";
             this.buttonOpenExcel.Size = new System.Drawing.Size(75, 23);
             this.buttonOpenExcel.TabIndex = 0;
@@ -64,7 +66,7 @@
             // buttonDo
             // 
             this.buttonDo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonDo.Location = new System.Drawing.Point(93, 415);
+            this.buttonDo.Location = new System.Drawing.Point(270, 415);
             this.buttonDo.Name = "buttonDo";
             this.buttonDo.Size = new System.Drawing.Size(75, 23);
             this.buttonDo.TabIndex = 3;
@@ -74,7 +76,7 @@
             // buttonSaveExcel
             // 
             this.buttonSaveExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonSaveExcel.Location = new System.Drawing.Point(174, 415);
+            this.buttonSaveExcel.Location = new System.Drawing.Point(351, 415);
             this.buttonSaveExcel.Name = "buttonSaveExcel";
             this.buttonSaveExcel.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveExcel.TabIndex = 4;
@@ -96,25 +98,48 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.textBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.textBoxCreateTempTable);
             this.splitContainer1.Size = new System.Drawing.Size(776, 397);
             this.splitContainer1.SplitterDistance = 258;
             this.splitContainer1.TabIndex = 5;
             // 
-            // textBox1
+            // textBoxCreateTempTable
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(514, 397);
-            this.textBox1.TabIndex = 0;
+            this.textBoxCreateTempTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxCreateTempTable.Location = new System.Drawing.Point(0, 0);
+            this.textBoxCreateTempTable.Multiline = true;
+            this.textBoxCreateTempTable.Name = "textBoxCreateTempTable";
+            this.textBoxCreateTempTable.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxCreateTempTable.Size = new System.Drawing.Size(514, 397);
+            this.textBoxCreateTempTable.TabIndex = 0;
+            this.textBoxCreateTempTable.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxCreateTempTable_KeyPress);
+            // 
+            // textBoxSheetName
+            // 
+            this.textBoxSheetName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBoxSheetName.Location = new System.Drawing.Point(83, 415);
+            this.textBoxSheetName.Name = "textBoxSheetName";
+            this.textBoxSheetName.Size = new System.Drawing.Size(100, 21);
+            this.textBoxSheetName.TabIndex = 6;
+            this.textBoxSheetName.Text = "Sheet1";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 420);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 12);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "SheetName:";
             // 
             // FormExcel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBoxSheetName);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.buttonSaveExcel);
             this.Controls.Add(this.buttonDo);
@@ -128,6 +153,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -138,6 +164,8 @@
         private System.Windows.Forms.Button buttonDo;
         private System.Windows.Forms.Button buttonSaveExcel;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxCreateTempTable;
+        private System.Windows.Forms.TextBox textBoxSheetName;
+        private System.Windows.Forms.Label label1;
     }
 }

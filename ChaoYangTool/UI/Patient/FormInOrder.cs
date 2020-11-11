@@ -76,10 +76,15 @@ namespace ChaoYangTool.UI.Patient
 
             dataGridViewSlip.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dataGridViewSlip.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+
+            dataGridViewTwocsIremorder.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            dataGridViewTwocsIremorder.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
         #endregion
 
         #region textBoxPatInfo_KeyDown & textBoxOrderName_KeyDown 事件 - 查询患者信息
+
+        #region textBoxPatInfo_KeyDown 事件 - 查询患者信息
         /// <summary>
         /// 查询患者信息
         /// </summary>
@@ -94,7 +99,9 @@ namespace ChaoYangTool.UI.Patient
 
             GetPatInfo();
         }
+        #endregion
 
+        #region textBoxOrderName_KeyDown 事件 - 查询患者信息
         /// <summary>
         /// 查询患者信息
         /// </summary>
@@ -108,10 +115,12 @@ namespace ChaoYangTool.UI.Patient
             }
 
             GetPatInfo();
-        }
+        } 
         #endregion
 
-        #region 获取患者信息
+        #endregion
+
+        #region 获取患者信息（患者医嘱，转室转科，出院信息，住院通知单等）
         /// <summary>
         /// 获取患者信息
         /// </summary>
@@ -124,32 +133,12 @@ namespace ChaoYangTool.UI.Patient
             }
 
             FillZero();
-            GetTransInfo(textBoxPatInfo.Text.Trim());
-            GetOutInfo(textBoxPatInfo.Text.Trim());
-            GetOrderInfo(textBoxPatInfo.Text.Trim());
+            GetTransInfo();
+            GetOutInfo();
+            GetOrderInfo();
             GetZytzdInfo();
+            GetAdviceOrderInfo();
         }
-        #endregion
-
-        #region 获取住院通知单信息
-        /// <summary>
-        /// 获取住院通知单信息
-        /// </summary>
-        private void GetZytzdInfo()
-        {
-            (DataTable DtMast, DataTable DtZytzd) aaa = BLL.Patient.InOrder.GetZYTZD(textBoxPatInfo.Text.Trim());
-            dataGridViewIpdMaster.DataSource = aaa.DtMast;
-            dataGridViewIpdZytzd.DataSource = aaa.DtZytzd;
-
-            dataGridViewIpdMaster.Columns["HOSPITALIZEDUID"].DefaultCellStyle.BackColor = Color.DarkOrange;
-            dataGridViewIpdZytzd.Columns["HOSPITALIZEDUID"].DefaultCellStyle.BackColor = Color.DarkOrange;
-            dataGridViewIpdMaster.Columns[0].DefaultCellStyle.BackColor = Color.DarkOrange;
-            dataGridViewIpdZytzd.Columns[0].DefaultCellStyle.BackColor = Color.DarkOrange;
-
-            dataGridViewIpdMaster.Columns[0].Width = 150;
-            dataGridViewIpdZytzd.Columns[0].Width = 150;
-            dataGridViewIpdZytzd.ClearSelection();
-        } 
         #endregion
 
         #region 判断患者ID是否合法
@@ -190,15 +179,83 @@ namespace ChaoYangTool.UI.Patient
         }
         #endregion
 
+        #region 获取嘱托医嘱
+        /// <summary>
+        /// 获取嘱托医嘱
+        /// </summary>
+        private void GetAdviceOrderInfo()
+        {
+            List<string> where = new List<string>();
+
+            where.Add($@"ir.ptno = '{textBoxPatInfo.Text.Trim()}'");
+
+            if (dateTimePicker1.Checked == true)
+            {
+                where.Add($@"ir.bdate = date '{dateTimePicker1.Value.ToString("yyyy-MM-dd")}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(textBoxOrderName.Text.Trim()))
+            {
+                string orders = textBoxOrderName.Text.Trim().Replace('，', ',');
+                string[] ss = orders.Split(',');
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("(");
+                foreach (string s in ss)
+                {
+                    sb.Append($@"ir.spcorder like '%{s}%' or ");
+                }
+                sb.Remove(sb.Length - 3, 3);
+                sb.Append(")");
+                where.Add(sb.ToString());
+            }
+
+            dataGridViewTwocsIremorder.DataSource = BLL.Patient.InOrder.GetAdviceOrderInfo(where);
+        } 
+        #endregion
+
+        #region 获取住院通知单信息
+        /// <summary>
+        /// 获取住院通知单信息
+        /// </summary>
+        private void GetZytzdInfo()
+        {
+            (DataTable DtMast, DataTable DtZytzd) aaa = BLL.Patient.InOrder.GetZYTZD(textBoxPatInfo.Text.Trim());
+            dataGridViewIpdMaster.DataSource = aaa.DtMast;
+            dataGridViewIpdZytzd.DataSource = aaa.DtZytzd;
+
+            dataGridViewIpdMaster.Columns["HOSPITALIZEDUID"].DefaultCellStyle.BackColor = Color.DarkOrange;
+            dataGridViewIpdZytzd.Columns["HOSPITALIZEDUID"].DefaultCellStyle.BackColor = Color.DarkOrange;
+            dataGridViewIpdMaster.Columns[0].DefaultCellStyle.BackColor = Color.DarkOrange;
+            dataGridViewIpdZytzd.Columns[0].DefaultCellStyle.BackColor = Color.DarkOrange;
+
+            dataGridViewIpdMaster.Columns[0].Width = 150;
+            dataGridViewIpdZytzd.Columns[0].Width = 150;
+
+            tabControl1.SelectedTab = tabControl1.TabPages["tabPage4"];
+            if (dataGridViewIpdMaster.Rows.Count > 0)
+            {
+                dataGridViewIpdMaster.Focus();
+                dataGridViewIpdMaster.CurrentCell = dataGridViewIpdMaster.Rows[0].Cells[1];
+            }
+
+            if (dataGridViewIpdMaster.Rows.Count > 0)
+            {
+                dataGridViewIpdZytzd.Focus();
+                dataGridViewIpdZytzd.CurrentCell = dataGridViewIpdZytzd.Rows[0].Cells[1];
+            }
+            tabControl1.SelectedTab = tabControl1.TabPages["tabPage1"];
+        } 
+        #endregion        
+
         #region 获取患者转科信息
         /// <summary>
         /// 获取患者转科信息
         /// </summary>
-        /// <param name="paramPtno"></param>
-        private void GetTransInfo(string paramPtno)
+        private void GetTransInfo()
         {
             richTextBoxTrans.Text = string.Empty;
-            richTextBoxTrans.Text = BLL.Patient.InOrder.GetTrans(paramPtno.Trim());
+            richTextBoxTrans.Text = BLL.Patient.InOrder.GetTrans(textBoxPatInfo.Text.Trim());
             int index = 0;
             int length = 20;
             foreach (char s in richTextBoxTrans.Text)
@@ -217,11 +274,10 @@ namespace ChaoYangTool.UI.Patient
         /// <summary>
         /// 出院信息
         /// </summary>
-        /// <param name="paramPtno"></param>
-        private void GetOutInfo(string paramPtno)
+        private void GetOutInfo()
         {
             richTextBoxOutInfo.Text = string.Empty;
-            richTextBoxOutInfo.Text = BLL.Patient.InOrder.GetOutInfo(paramPtno.Trim());
+            richTextBoxOutInfo.Text = BLL.Patient.InOrder.GetOutInfo(textBoxPatInfo.Text.Trim());
             int index = 0;
             int length = 17;
             foreach (char s in richTextBoxOutInfo.Text)
@@ -240,8 +296,9 @@ namespace ChaoYangTool.UI.Patient
         /// <summary>
         /// 获取患者医嘱信息
         /// </summary>
-        /// <param name="paramPtno"></param>
-        private void GetOrderInfo(string paramPtno)
+        /// <param name=""></param>
+        /// <param name=""></param>
+        private void GetOrderInfo()
         {
             #region sql语句示范
             /*
@@ -318,9 +375,9 @@ select p.sname,
         }
         #endregion
 
-        #region 获取OrderNo详细信息
+        #region 根据dataGridViewPatOrderInfo中的orderno，获取OrderNo详细信息，并展示在dataGridViewOrderNoDetail中
         /// <summary>
-        /// 获取OrderNo详细信息
+        /// 根据dataGridViewPatOrderInfo中的orderno，获取OrderNo详细信息，并展示在dataGridViewOrderNoDetail中
         /// </summary>
         private void GetOrderDeteil()
         {
@@ -331,6 +388,37 @@ select p.sname,
 
             dataGridViewSlip.DataSource = null;
             dataGridViewSlip.DataSource = BLL.Patient.InOrder.GetSlip(orderNo);
+        }
+        #endregion
+
+        #region 右键快捷菜单对医嘱的操作（停嘱，取消停嘱，允许轮训等）
+
+        #region 右键单击，弹出快捷菜单
+        /// <summary>
+        /// 右键单击，弹出快捷菜单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridViewOrderNoDetail_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (e.RowIndex >= 0)
+                {
+                    if (dataGridViewPatOrderInfo.Rows[e.RowIndex].Selected == false)//若行已是选中状态就不再进行设置
+                    {
+                        dataGridViewOrderNoDetail.ClearSelection();
+                        dataGridViewOrderNoDetail.Rows[e.RowIndex].Selected = true;
+                    }
+
+                    if (dataGridViewOrderNoDetail.SelectedRows.Count == 1)//只选中一行时设置活动单元格
+                    {
+                        dataGridViewOrderNoDetail.CurrentCell = dataGridViewOrderNoDetail.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    }
+
+                    contextMenuStrip1.Show(MousePosition.X, MousePosition.Y);//弹出操作菜单
+                }
+            }
         }
         #endregion
 
@@ -399,33 +487,6 @@ select p.sname,
         }
         #endregion
 
-        #region 右键单击，弹出快捷菜单
-        /// <summary>
-        /// 右键单击，弹出快捷菜单
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dataGridViewOrderNoDetail_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                if (e.RowIndex >= 0)
-                {
-                    if (dataGridViewPatOrderInfo.Rows[e.RowIndex].Selected == false)//若行已是选中状态就不再进行设置
-                    {
-                        dataGridViewOrderNoDetail.ClearSelection();
-                        dataGridViewOrderNoDetail.Rows[e.RowIndex].Selected = true;
-                    }
-
-                    if (dataGridViewOrderNoDetail.SelectedRows.Count == 1)//只选中一行时设置活动单元格
-                    {
-                        dataGridViewOrderNoDetail.CurrentCell = dataGridViewOrderNoDetail.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                    }
-
-                    contextMenuStrip1.Show(MousePosition.X, MousePosition.Y);//弹出操作菜单
-                }
-            }
-        }
         #endregion
 
         #region buttonAllowPrintZytzd_Click事件 - 允许打印住院通知单
@@ -439,6 +500,5 @@ select p.sname,
             textBox1.Text = BLL.Patient.InOrder.AllowPrintZYTZD(textBoxPatInfo.Text.Trim());
         }
         #endregion
-
     }
 }

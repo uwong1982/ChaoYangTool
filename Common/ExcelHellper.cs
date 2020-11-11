@@ -31,11 +31,25 @@ namespace Common
 
             try
             {
-
                 //string path = string.Format($@"{System.Threading.Thread.GetDomain().BaseDirectory}aaa.xlsx");
                 workBook = excelApp.Workbooks.Open(paramPath);
-                workSheet = (Excel.Worksheet)workBook.Sheets[paramSheet];
 
+                bool isExsitSheet = false;
+                foreach (Excel.Worksheet ws in workBook.Worksheets)
+                {
+                    if (ws.Name.Equals(paramSheet))
+                    {
+                        isExsitSheet = true;
+                        break;
+                    }
+                }
+
+                if (isExsitSheet == false)
+                {
+                    throw new Exception($@"{paramSheet}不存在");
+                }
+
+                workSheet = (Excel.Worksheet)workBook.Sheets[paramSheet];
                 for (int col = 1; col <= workSheet.UsedRange.Columns.Count; col++)
                 {
                     dt.Columns.Add();

@@ -52,6 +52,8 @@
             this.dataGridViewIpdMaster = new System.Windows.Forms.DataGridView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.buttonAllowPrintZytzd = new System.Windows.Forms.Button();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.dataGridViewTwocsIremorder = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemStopOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCancelStopOrder = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +75,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIpdZytzd)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIpdMaster)).BeginInit();
+            this.tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTwocsIremorder)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,6 +131,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(12, 39);
             this.tabControl1.Name = "tabControl1";
@@ -314,7 +319,6 @@
             this.dataGridViewIpdMaster.Location = new System.Drawing.Point(3, 17);
             this.dataGridViewIpdMaster.Name = "dataGridViewIpdMaster";
             this.dataGridViewIpdMaster.RowTemplate.Height = 23;
-            this.dataGridViewIpdMaster.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewIpdMaster.Size = new System.Drawing.Size(750, 80);
             this.dataGridViewIpdMaster.TabIndex = 0;
             // 
@@ -335,6 +339,28 @@
             this.buttonAllowPrintZytzd.Text = "允许打印住院通知单";
             this.buttonAllowPrintZytzd.UseVisualStyleBackColor = true;
             this.buttonAllowPrintZytzd.Click += new System.EventHandler(this.buttonAllowPrintZytzd_Click);
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.dataGridViewTwocsIremorder);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(768, 373);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "嘱托医嘱";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewTwocsIremorder
+            // 
+            this.dataGridViewTwocsIremorder.AllowUserToAddRows = false;
+            this.dataGridViewTwocsIremorder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTwocsIremorder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewTwocsIremorder.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewTwocsIremorder.Name = "dataGridViewTwocsIremorder";
+            this.dataGridViewTwocsIremorder.RowTemplate.Height = 23;
+            this.dataGridViewTwocsIremorder.Size = new System.Drawing.Size(762, 367);
+            this.dataGridViewTwocsIremorder.TabIndex = 0;
             // 
             // contextMenuStrip1
             // 
@@ -398,6 +424,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIpdZytzd)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIpdMaster)).EndInit();
+            this.tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTwocsIremorder)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -433,5 +461,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridView dataGridViewIpdMaster;
         private System.Windows.Forms.DataGridView dataGridViewSlip;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.DataGridView dataGridViewTwocsIremorder;
     }
 }

@@ -39,7 +39,7 @@ namespace BLL.Patient
   left outer join twbas_patient p
     on zg.ptno = p.ptno
   left outer join twocs_iprslip i
-    on zg.orderno = i.orderno
+    on zg.orderno = i.orderno and zg.bdate =i.bdate
   left outer join twbas_basecode ba
     on trim(zg.senddept1) = trim(ba.code)
    and ba.bun = 'SENDDEPT'
@@ -256,6 +256,7 @@ namespace BLL.Patient
 
             DataTable dtMast = DBUtility.DBHelperList.Oracle58.Query(sqlMaster).Tables[0];
             DataTable dtZytzd = DBUtility.DBHelperList.Oracle58.Query(sqlZytzd).Tables[0];
+
             return (dtMast, dtZytzd);
         }
         #endregion
@@ -323,7 +324,33 @@ namespace BLL.Patient
             LogUtility.LogHelper.WriteLog($@"---------------------------------交费单：{DateTime.Now.ToString()}---------------------------------", LogName);
             LogUtility.LogHelper.WriteLog(sql.ToString(), LogName);
             return DBUtility.DBHelperList.Oracle58.Query(sql).Tables[0];
-        } 
+        }
+        #endregion
+
+        #region 根据传入的Where条件列表，获取嘱托医嘱信息
+        /// <summary>
+        /// 根据传入的Where条件列表，获取嘱托医嘱信息
+        /// </summary>
+        /// <param name="paramWhereList">where条件列表</param>
+        /// <returns></returns>
+        public static DataTable GetAdviceOrderInfo(List<string> paramWhereList)
+        {
+            StringBuilder sqlStrbuider = new StringBuilder(@"select p.sname, ir.*
+  from twocs_iremorder ir --住院医嘱表
+  left outer join twbas_patient p --患者表
+    on ir.ptno = p.ptno
+ where 1 = 1");
+            sqlStrbuider.AppendLine();
+            foreach (string condition in paramWhereList)
+            {
+                sqlStrbuider.AppendLine($@"   and {condition}");
+            }
+            sqlStrbuider.AppendLine(" order by ir.bdate desc");
+
+            LogUtility.LogHelper.WriteLog($@"---------------------------------获取嘱托医嘱信息：{DateTime.Now.ToString()}---------------------------------", LogName);
+            LogUtility.LogHelper.WriteLog(sqlStrbuider.ToString(), LogName);
+            return DBUtility.DBHelperList.Oracle58.Query(sqlStrbuider.ToString()).Tables[0];
+        }
         #endregion
     }
 }
